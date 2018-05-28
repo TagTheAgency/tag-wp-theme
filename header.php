@@ -30,16 +30,42 @@
 	</head>
 	<body <?php body_class(); ?>>
 
+		<!-- Popups + Overlay -->
+		<div class="fixed search-overlay container-fluid white vw-100 vh-100 popup" data-popup="search-overlay">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 text-right pt-5">
+						<i id="search-overlay-close" class="material-icons trigger popup-close" data-popup-close="search-overlay">close</i>
+					</div>
+				</div>
+				<div class="row vh-75 align-items-center justify-content-center">
+					<div class="col-10">
+						<form action="" class="search-form mb-4 input-minimal">
+							<input id="search-form-input" class="w-100 b-none bb-2 pl-1" type="text" name="search" placeholder="search...">
+						</form>
+						<div class="d-flex align-items-center justify-content-between flex-wrap">
+							<div class="btn btn-black-filled m-0 btn-sm w-100 w-md-auto">SEARCH</div>
+							<p class="d-none d-md-block">Press 'Enter' to search or 'Esc' to close.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- Navigation -->
-		<nav id="navbar" class="fixed bg-on-scroll gradient drop-shadow bg-transparent">
+		<nav id="navbar" class="fixed bg-on-scroll black drop-shadow bg-transparent">
 			<div class="container text-white">
 				<div class="row justify-content-between align-items-center nav-bar">
 					<div class="col-auto">
-						<div class="logo-wrapper">
-							<a href="<?php echo home_url(); ?>">
-								<img src="<?php echo get_template_directory_uri(); ?>/img/logo.png" alt="Logo" class="logo-img">
-							</a>
-						</div>
+						<?php
+						$custom_logo_id = get_theme_mod( 'custom_logo' );
+						$logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+						if ( has_custom_logo() ) { ?>
+							<div class="logo-wrapper">
+								<a href="<?= home_url();?>"><img src="<?= esc_url( $logo[0] ) ?>">
+							</div>
+						<?php } else { ?>
+							<h1><?= get_bloginfo( 'name' ) ?></h1>';
+						<?php } ?>
 					</div>
 					<div class="col-auto d-none d-md-flex align-items-center">
 						<?php custom_nav(); ?>

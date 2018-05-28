@@ -74,10 +74,6 @@ hr{
 .white{
 	background-color: $white;
 	color: $black;
-
-    input[type=text],input[type=email]{
-        background-color: #f2f2f2 !important;
-    }
 }
 
 .darken{
@@ -156,7 +152,7 @@ nav{
 }
 
 .logo-wrapper{
-	width: 80px;
+	width: 100px;
 
 	img{
 		width: 100%;
@@ -370,6 +366,17 @@ nav{
     }
 }
 
+.btn-black-filled{
+    border: 3px solid $black;
+    color: $white;
+    background-color: $black;
+
+    &:hover{
+        color: $black;
+        background-color: transparent;
+    }
+}
+
 .drop-shadow{
     box-shadow: 1px 0px 6px rgba(#000, 0.25);
 }
@@ -533,12 +540,19 @@ input{
 .input-minimal{
     input{
         border-radius: 0;
+        background-color: transparent;
+
+        &::placeholder{
+            color: #0a0a0a;
+            opacity: 0.7;
+        }
 
         &:focus{
             background-color: transparent;
             color: inherit;
         }
     }
+
 
     .input-light{
         &::placeholder{
@@ -1496,6 +1510,36 @@ footer{
   .vw-sm-100{
       width: 100vw !important;
   }
+  .w-sm-25 {
+    width: 25% !important;
+  }
+  .w-sm-50 {
+    width: 50% !important;
+  }
+  .w-sm-75 {
+    width: 75% !important;
+  }
+  .w-sm-100 {
+    width: 100% !important;
+  }
+  .w-sm-auto {
+    width: auto !important;
+  }
+  .h-sm-25 {
+    height: 25% !important;
+  }
+  .h-sm-50 {
+    height: 50% !important;
+  }
+  .h-sm-75 {
+    height: 75% !important;
+  }
+  .h-sm-100 {
+    height: 100% !important;
+  }
+  .h-sm-auto {
+    height: auto !important;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1769,6 +1813,36 @@ footer{
   }
   .vw-md-100{
       width: 100vw !important;
+  }
+  .w-md-25 {
+    width: 25% !important;
+  }
+  .w-md-50 {
+    width: 50% !important;
+  }
+  .w-md-75 {
+    width: 75% !important;
+  }
+  .w-md-100 {
+    width: 100% !important;
+  }
+  .w-md-auto {
+    width: auto !important;
+  }
+  .h-md-25 {
+    height: 25% !important;
+  }
+  .h-md-50 {
+    height: 50% !important;
+  }
+  .h-md-75 {
+    height: 75% !important;
+  }
+  .h-md-100 {
+    height: 100% !important;
+  }
+  .h-md-auto {
+    height: auto !important;
   }
 }
 
@@ -2044,6 +2118,36 @@ footer{
   .vw-lg-100{
       width: 100vw !important;
   }
+  .w-sm-25 {
+    width: 25% !important;
+  }
+  .w-lg-50 {
+    width: 50% !important;
+  }
+  .w-lg-75 {
+    width: 75% !important;
+  }
+  .w-lg-100 {
+    width: 100% !important;
+  }
+  .w-lg-auto {
+    width: auto !important;
+  }
+  .h-lg-25 {
+    height: 25% !important;
+  }
+  .h-lg-50 {
+    height: 50% !important;
+  }
+  .h-lg-75 {
+    height: 75% !important;
+  }
+  .h-lg-100 {
+    height: 100% !important;
+  }
+  .h-lg-auto {
+    height: auto !important;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -2318,8 +2422,37 @@ footer{
   .vw-xl-100{
       width: 100vw !important;
   }
+  .w-xl-25 {
+    width: 25% !important;
+  }
+  .w-xl-50 {
+    width: 50% !important;
+  }
+  .w-xl-75 {
+    width: 75% !important;
+  }
+  .w-xl-100 {
+    width: 100% !important;
+  }
+  .w-xl-auto {
+    width: auto !important;
+  }
+  .h-xl-25 {
+    height: 25% !important;
+  }
+  .h-xl-50 {
+    height: 50% !important;
+  }
+  .h-xl-75 {
+    height: 75% !important;
+  }
+  .h-xl-100 {
+    height: 100% !important;
+  }
+  .h-xl-auto {
+    height: auto !important;
+  }
 }
-
 
 .d-none {
   display: none !important;

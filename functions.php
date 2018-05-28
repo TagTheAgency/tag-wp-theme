@@ -25,6 +25,9 @@ if (function_exists('add_theme_support'))
     // Add Menu Support
     add_theme_support('menus');
 
+    // Add Logos
+    add_theme_support( 'custom-logo' );
+
     // Add Thumbnail Theme Support
     add_theme_support('post-thumbnails');
     add_image_size('large', 700, '', true); // Large Thumbnail
@@ -62,6 +65,15 @@ if (function_exists('add_theme_support'))
 	Functions
 \*------------------------------------*/
 
+// Custom Logo
+function themename_custom_logo_setup() {
+    $defaults = array(
+        'header-text' => array( 'site-title', 'site-description' ),
+    );
+    add_theme_support( 'custom-logo', $defaults );
+}
+add_action( 'after_setup_theme', 'themename_custom_logo_setup' );
+
 // HTML5 Blank navigation
 function custom_nav()
 {
@@ -72,7 +84,7 @@ function custom_nav()
 		'container'       => 'div',
 		'container_class' => 'menu-{menu slug}-container',
 		'container_id'    => '',
-		'menu_class'      => 'col-auto d-none d-md-flex align-items-center',
+		'menu_class'      => 'col-auto d-none d-md-flex align-items-center hello',
 		'menu_id'         => '',
 		'echo'            => true,
 		'fallback_cb'     => 'wp_page_menu',
@@ -80,7 +92,7 @@ function custom_nav()
 		'after'           => '',
 		'link_before'     => '',
 		'link_after'      => '',
-		'items_wrap'      => '<ul class"ls-2">%3$s</ul>',
+		'items_wrap'      => '<ul class="ls-2 nav-item-uppercase">%3$s</ul>',
 		'depth'           => 0,
 		'walker'          => ''
 		)
@@ -345,7 +357,7 @@ add_action('wp_print_scripts', 'html5blank_conditional_scripts'); // Add Conditi
 add_action('get_header', 'enable_threaded_comments'); // Enable Threaded Comments
 add_action('wp_enqueue_scripts', 'html5blank_styles'); // Add Theme Stylesheet
 add_action('init', 'register_html5_menu'); // Add HTML5 Blank Menu
-add_action('init', 'create_post_type_html5'); // Add our HTML5 Blank Custom Post Type
+add_action('init', 'custom_post_type'); // Add our HTML5 Blank Custom Post Type
 add_action('widgets_init', 'my_remove_recent_comments_style'); // Remove inline Recent Comment Styles from wp_head()
 add_action('init', 'html5wp_pagination'); // Add our HTML5 Pagination
 
@@ -391,30 +403,64 @@ add_shortcode('html5_shortcode_demo_2', 'html5_shortcode_demo_2'); // Place [htm
 // Shortcodes above would be nested like this -
 // [html5_shortcode_demo] [html5_shortcode_demo_2] Here's the page title! [/html5_shortcode_demo_2] [/html5_shortcode_demo]
 
+
+/*------------------------------------*\
+	Color Picker For Admin Side
+\*------------------------------------*/
+add_action( 'admin_enqueue_scripts', 'mytheme_backend_scripts');
+
+if ( ! function_exists( 'mytheme_backend_scripts' ) ){
+	function mytheme_backend_scripts( $hook ) {
+		wp_enqueue_style( 'wp-color-picker');
+		wp_enqueue_script( 'wp-color-picker');
+	}
+}
+
+if ( ! function_exists( 'mytheme_header_meta_box' ) ) {
+	function mytheme_header_meta_box( $post ) {
+		$custom = get_post_custom( $post->ID );
+		$header_color = ( isset( $custom['header_color'][0] ) ) ? $custom['header_color'][0] : '';
+		wp_nonce_field( 'mytheme_header_meta_box', 'mytheme_header_meta_box_nonce' );
+		?>
+		<script>
+		jQuery(document).ready(function($){
+		    $('.color_field').each(function(){
+        		$(this).wpColorPicker();
+    		    });
+		});
+		</script>
+		<div class="pagebox">
+		    <p><?php esc_attr_e('Choose a color for your post header.', 'mytheme' ); ?></p>
+		    <input class="color_field" type="hidden" name="header_color" value="<?php esc_attr_e( $header_color ); ?>"/>
+		</div>
+		<?php
+	}
+}
+
 /*------------------------------------*\
 	Custom Post Types
 \*------------------------------------*/
 
 // Create 1 Custom Post type for a Demo, called HTML5-Blank
-function create_post_type_html5()
+function custom_post_type()
 {
-    register_taxonomy_for_object_type('category', 'html5-blank'); // Register Taxonomies for Category
-    register_taxonomy_for_object_type('post_tag', 'html5-blank');
-    register_post_type('html5-blank', // Register Custom Post Type
+    register_taxonomy_for_object_type('category', 'homepage-section'); // Register Taxonomies for Category
+    register_taxonomy_for_object_type('post_tag', 'homepage-section');
+    register_post_type('homepage-section', // Register Custom Post Type
         array(
         'labels' => array(
-            'name' => __('HTML5 Blank Custom Post', 'html5blank'), // Rename these to suit
-            'singular_name' => __('HTML5 Blank Custom Post', 'html5blank'),
-            'add_new' => __('Add New', 'html5blank'),
-            'add_new_item' => __('Add New HTML5 Blank Custom Post', 'html5blank'),
-            'edit' => __('Edit', 'html5blank'),
-            'edit_item' => __('Edit HTML5 Blank Custom Post', 'html5blank'),
-            'new_item' => __('New HTML5 Blank Custom Post', 'html5blank'),
-            'view' => __('View HTML5 Blank Custom Post', 'html5blank'),
-            'view_item' => __('View HTML5 Blank Custom Post', 'html5blank'),
-            'search_items' => __('Search HTML5 Blank Custom Post', 'html5blank'),
-            'not_found' => __('No HTML5 Blank Custom Posts found', 'html5blank'),
-            'not_found_in_trash' => __('No HTML5 Blank Custom Posts found in Trash', 'html5blank')
+            'name' => __('Homepage Section', 'homepagesection'), // Rename these to suit
+            'singular_name' => __('Homepage Section', 'homepagesection'),
+            'add_new' => __('Add New', 'homepagesection'),
+            'add_new_item' => __('Add New Homepage Section', 'homepagesection'),
+            'edit' => __('Edit', 'homepagesection'),
+            'edit_item' => __('Edit Homepage Section', 'homepagesection'),
+            'new_item' => __('New Homepage Section', 'homepagesection'),
+            'view' => __('View Homepage Section', 'homepagesection'),
+            'view_item' => __('View Homepage Section', 'homepagesection'),
+            'search_items' => __('Search Homepage Section', 'homepagesection'),
+            'not_found' => __('No Homepage Sections found', 'homepagesection'),
+            'not_found_in_trash' => __('No Homepage Section Posts found in Trash', 'homepagesection')
         ),
         'public' => true,
         'hierarchical' => true, // Allows your posts to behave like Hierarchy Pages
@@ -432,6 +478,53 @@ function create_post_type_html5()
         ) // Add Category and Post Tags support
     ));
 }
+
+
+
+/*------------------------------------*\
+	Custom Meta Boxes
+\*------------------------------------*/
+
+function homepage_section_alignment()
+{
+    $screens = ['homepage-section'];
+    foreach ($screens as $screen) {
+        add_meta_box(
+            'text_alignment_id', // Unique ID
+            'Text Alignment',  // Box title
+            'custom_meta_html',  // Content callback, must be of type callable
+            $screen                   // Post type
+        );
+    }
+}
+
+add_action('add_meta_boxes', 'homepage_section_alignment');
+
+function custom_meta_html($post){
+    $value = get_post_meta($post->ID, 'text_alignment_meta', true);
+    wp_nonce_field( basename( __FILE__ ), 'post_options_nonce' );
+    ?>
+    <label for="text-alignment">Description for this field</label>
+    <select name="text-alignment" id="alignment-field" class="">
+        <option value="text-left">Left</option>
+        <option value="text-right">Right</option>
+        <option value="text-center">Center</option>
+    </select>
+    <?php
+}
+
+function text_alignment_save($post_id)
+{
+    if (array_key_exists('text-alignment', $_POST)) {
+        update_post_meta(
+            $post_id,
+            'text_alignment_meta',
+            $_POST['text-alignment']
+        );
+    }
+}
+
+add_action('save_post', 'text_alignment_save');
 
 /*------------------------------------*\
 	ShortCode Functions
