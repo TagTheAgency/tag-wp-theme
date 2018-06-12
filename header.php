@@ -52,8 +52,8 @@
 			</div>
 		</div>
 		<!-- Navigation -->
-		<nav id="navbar" class="fixed bg-on-scroll black drop-shadow bg-transparent">
-			<div class="container text-white">
+		<nav id="navbar" class="fixed bg-on-scroll white drop-shadow bg-transparent">
+			<div class="container">
 				<div class="row justify-content-between align-items-center nav-bar">
 					<div class="col-auto">
 						<?php
@@ -67,9 +67,9 @@
 							<h1><?= get_bloginfo( 'name' ) ?></h1>';
 						<?php } ?>
 					</div>
-					<div class="col-auto d-none d-md-flex align-items-center">
+					<div class="col-auto d-none d-md-flex align-items-center text-black">
 						<?php custom_nav(); ?>
-						<div class="btn btn-white btn-round ml-4 search-overlay-btn py-2 px-4 btn-sm" data-popup-open="search-overlay">SEARCH</div>
+						<div class="btn btn-black btn-round ml-4 search-overlay-btn py-2 px-4 btn-sm" data-popup-open="search-overlay">SEARCH</div>
 					</div>
 					<div class="col-auto d-block d-md-none">
 						<i id="mobile-menu-btn" class="material-icons trigger">menu</i>

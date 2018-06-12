@@ -73,11 +73,11 @@
 
 	$(window).scroll(function(){
 		var st = $(this).scrollTop();
-		if( st > 500){
+		if( st > 70){
 			if( $('nav').hasClass('bg-on-scroll') ){
 				$('nav').removeClass('bg-transparent');
 			}
-		} else if( st < 500){
+		} else if( st < 70){
 			if( $('nav').hasClass('bg-on-scroll') ){
 				$('nav').addClass('bg-transparent');
 			}
