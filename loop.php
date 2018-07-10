@@ -2,7 +2,7 @@
 <?php $loop = new WP_query($args); ?>
 <?php if ($loop->have_posts()): while($loop->have_posts()):$loop->the_post(); ?>
 	<?php
-		$alignment = get_post_meta( $post->ID, 'text_alignment_meta', true );
+		$alignment = get_post_meta( $post->ID, 'alignment_meta_key', true );
 		$bg_color = get_post_meta( $post->ID, 'post_bg', true );
 	?>
 	<div class="container-fluid py-5 text-black" style="background-color: #<?= $bg_color ?>">

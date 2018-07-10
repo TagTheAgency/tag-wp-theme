@@ -486,24 +486,19 @@ function custom_post_type()
 	Custom Meta Boxes
 \*------------------------------------*/
 
-function homepage_section_alignment()
-{
-    $screens = ['homepage-section'];
-    foreach ($screens as $screen) {
-        add_meta_box(
-            'text_alignment_id', // Unique ID
-            'Text Alignment',  // Box title
-            'custom_meta_html',  // Content callback, must be of type callable
-            $screen                   // Post type
-        );
-    }
+
+/*------------------------------------*\
+	Colour Picker
+\*------------------------------------*/
+function wpse_80236_Colorpicker(){
+	wp_enqueue_style( 'wp-color-picker');
+	//
+	wp_enqueue_script( 'wp-color-picker');
 }
 
 function wdm_add_meta_box() {
 	add_meta_box('wdm_sectionid', 'Post Background', 'wdm_meta_box_callback', 'homepage-section');
 }
-
-add_action( 'add_meta_boxes', 'wdm_add_meta_box' );
 
 function wdm_meta_box_callback( $post ) {
 	wp_nonce_field( 'wdm_meta_box', 'wdm_meta_box_nonce' );
@@ -527,51 +522,25 @@ function wdm_meta_box_callback( $post ) {
     <?php
 }
 
-function wdm_save_meta_box_data( $post_id ) {
-	if ( !isset( $_POST['wdm_meta_box_nonce'] ) ) {
-		return;
-	}
-
-	if ( !wp_verify_nonce( $_POST['wdm_meta_box_nonce'], 'wdm_meta_box' ) ) {
-		return;
-	}
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-	if ( !current_user_can( 'edit_post', $post_id ) ) {
-		return;
-	}
-
-	$post_bg = ( isset( $_POST['post_bg'] ) ? sanitize_html_class( $_POST['post_bg'] ) : '' );
-	update_post_meta( $post_id, 'post_bg', $post_bg );
-}
-
-add_action( 'save_post', 'wdm_save_meta_box_data' );
-
-function wpse_80236_Colorpicker(){
-	wp_enqueue_style( 'wp-color-picker');
-	//
-	wp_enqueue_script( 'wp-color-picker');
-}
-add_action('admin_enqueue_scripts', 'wpse_80236_Colorpicker');
-
-add_action('add_meta_boxes', 'homepage_section_alignment');
-
-function custom_meta_html($post){
-    $value = get_post_meta($post->ID, 'text_alignment_meta', true);
-    wp_nonce_field( basename( __FILE__ ), 'post_options_nonce' );
-    ?>
-    <label for="text-alignment">Description for this field</label>
-    <select name="text-alignment" id="alignment-field" class="">
-        <option value="text-left">Left</option>
-        <option value="text-right">Right</option>
-        <option value="text-center">Center</option>
-    </select>
-    <?php
-}
-
-function text_alignment_save($post_id)
+function colour_picker_save($post_id)
 {
+    if ( !isset( $_POST['wdm_meta_box_nonce'] ) ) {
+        return;
+    }
+
+    if ( !wp_verify_nonce( $_POST['wdm_meta_box_nonce'], 'wdm_meta_box' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( !current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    $post_bg = ( isset( $_POST['post_bg'] ) ? sanitize_html_class( $_POST['post_bg'] ) : '' );
+    update_post_meta( $post_id, 'post_bg', $post_bg );
+
     if (array_key_exists('text-alignment', $_POST)) {
         update_post_meta(
             $post_id,
@@ -581,7 +550,49 @@ function text_alignment_save($post_id)
     }
 }
 
-add_action('save_post', 'text_alignment_save');
+add_action( 'add_meta_boxes', 'wdm_add_meta_box' );
+add_action('save_post', 'colour_picker_save');
+add_action('admin_enqueue_scripts', 'wpse_80236_Colorpicker');
+
+/*------------------------------------*\
+	Text Alignment
+\*------------------------------------*/
+
+function add_meta_box_text_align() {
+	add_meta_box('text_align_id', 'Text Alignment', 'meta_box_text_align_html', 'homepage-section');
+}
+
+function meta_box_text_align_html($post){
+    wp_nonce_field( 'text_align_meta', 'text_align_meta_nonce');
+    $alignment_value = get_post_meta( $post->ID, 'alignment_meta_key', true);
+    ?>
+    <div class="custom_meta_box">
+        <select name="alignment_value" id="alignment_value">
+            <option value='text-left' <?php selected($alignment_value, 'text-left'); ?>>Left</option>
+            <option value='text-center' <?php selected($alignment_value, 'text-center'); ?>>Center</option>
+            <option value='text-right' <?php selected($alignment_value, 'text-right'); ?>>Right</option>
+        </select>
+    </div>
+    <?php
+}
+
+function save_meta_box_text_align($post_id){
+
+    if (array_key_exists('alignment_value', $_POST)) {
+        update_post_meta(
+            $post_id,
+            'alignment_meta_key',
+            $_POST['alignment_value']
+        );
+    }
+
+}
+
+add_action( 'add_meta_boxes', 'add_meta_box_text_align' );
+add_action('save_post', 'save_meta_box_text_align');
+
+
+
 
 /*------------------------------------*\
 	ShortCode Functions
